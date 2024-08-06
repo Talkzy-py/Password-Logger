@@ -1,4 +1,4 @@
-Password Scraper
+Password Scraper,
 This script extracts saved passwords from Google Chrome and sends them to a Discord channel using a webhook.
 
 Requirements

